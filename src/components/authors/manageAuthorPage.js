@@ -26,28 +26,34 @@ var ManageAuthorPage = React.createClass({
             dirty: false
         };
     },
+    componentWillMount: function () {
+        var authorId = this.props.params.id;
+
+        if (authorId) {
+            this.setState({ author: AuthorApi.getAuthorById(authorId) });
+        }
+    },
     setAuthorState: function (event) {
         var field = event.target.name;
         var value = event.target.value;
         this.state.author[field] = value;
 
-        this.setState({ dirty: true });
-        return this.setState({ author: this.state.author });
+        return this.setState({ author: this.state.author, dirty: true });
     },
     authorFormIsValid: function () {
         var formIsValid = true;
-        this.state.errors = {};
+        var errors = {};
 
         if (this.state.author.firstName.length < 3) {
-            this.state.errors.firstName = 'First name must be at least 3 characters.';
+            errors.firstName = 'First name must be at least 3 characters.';
             formIsValid = false;
         }
         if (this.state.author.lastName.length < 3) {
-            this.state.errors.lastName = 'First name must be at least 3 characters.';
+            errors.lastName = 'Last name must be at least 3 characters.';
             formIsValid = false;
         }
 
-        this.setState({ errors: this.state.errors });
+        this.setState({ errors: errors });
         return formIsValid;
     },
     saveAuthor: function (event) {

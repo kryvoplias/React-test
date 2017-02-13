@@ -2,8 +2,9 @@
 
 var React = require('react');
 var Link = require('react-router').Link;
-var AuthorApi = require('../../api/authorApi');
+
 var AuthorList = require('./authorList');
+var AuthorApi = require('../../api/authorApi');
 
 var Authors = React.createClass({
     getInitialState: function () {
