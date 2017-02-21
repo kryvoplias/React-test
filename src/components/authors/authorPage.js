@@ -4,29 +4,24 @@ var React = require('react');
 var Link = require('react-router').Link;
 
 var AuthorList = require('./authorList');
-var AuthorApi = require('../../api/authorApi');
+var AuthorStore = require('../../stores/authorStore');
 
 var Authors = React.createClass({
     getInitialState: function () {
         return {
-            authors: []
+            authors: AuthorStore.getAllAuthors()
         };
     },
-    componentDidMount: function () {
-        if (this.isMounted()) {
-            this.setState({ authors: AuthorApi.getAllAuthors() });
-        }
+    componentWillMount: function(){
+        AuthorStore.addChangeListener(this.m_onChange);
+    },
+    componentWillUnmount: function(){
+        AuthorStore.removeChangeListener(this.m_onChange);
+    },
+    m_onChange: function () {
+        this.setState({ authors: AuthorStore.getAllAuthors() });
     },
     render: function () {
-        var createAuthorRow = function (author) {
-            return (
-                <tr key={author.id}>
-                    <td><a href={'/#authors/' + author.id}>{author.id}</a></td>
-                    <td>{author.firstName} {author.lastName}</td>
-                </tr>
-            );
-        };
-
         return (
             <div>
                 <h1>Authors</h1>
